@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Collapsible sidebar using Bootstrap 3</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="css/style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans|Roboto+Slab|Shrikhand" rel="stylesheet">
+
+    <link href="css/mui.css" rel="stylesheet" type="text/css" />
+    <script src="js/mui.js"></script>
+    <script src="js/jquery-3.1.1.min"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js?v=1"></script>
+
+	<script src="js/vue.js"></script>
+
+    <style>
+        #resume {
+
+            padding: .25in .1in;
+
+        }
+
+        #resume.decorator {
+            -webkit-box-shadow: 2px 2px 25px -5px rgba(0, 0, 0, 0.5);
+            -moz-box-shadow: 2px 2px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 2px 2px 25px -5px rgba(0, 0, 0, 0.5);
+            margin: 10px;
+        }
+
+        html {
+            padding: 35px;
+            font-size: 13.5px;
+        }
+
+        body {
+            color: #333;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+        }
+
+        .form-control {
+            border: 0;
+        }
+        table {
+        border: 1px solid #00f;
+        border-collapse: collapse;
+        margin: 0;
+        padding: 0;
+
+        table-layout: fixed;
+        }
+        table caption {
+        font-size: 1.5em;
+        margin: .5em 0 .75em;
+        }
+        table tr {
+        background: #ffffff;
+        border: 1px solid #fff;
+        padding: .35em;
+        }
+        table th,
+        table td {
+        padding: .625em;
+        text-align: center;
+        }
+        table th {
+        font-size: .85em;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        }
+        @media screen and (max-width: 600px) {
+        table {
+            border: 0;
+        }
+        table caption {
+            font-size: 1.3em;
+        }
+        table thead {
+            border: none;
+            clip: rect(0 0 0 0);
+            height: 1px;
+            margin: -1px;
+            overflow: hidden;
+            padding: 0;
+            position: absolute;
+            width: 1px;
+        }
+        table tr {
+        
+            display: block;
+            margin-bottom: .625em;
+        }
+        table td {
+            border-bottom: 1px solid #fff;
+            display: block;
+            font-size: .8em;
+            text-align: right;
+        }
+        table td:before {
+            /*
+            * aria-label has no advantage, it won't be read inside a table
+            content: attr(aria-label);
+            */
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        table td:last-child {
+            border-bottom: 0;
+        }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app" class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar" style="">
+            <div id="dismiss">
+                <i class="glyphicon glyphicon-arrow-left"></i>
+            </div>
+
+            <div class="sidebar-header">
+                <h3>Singhal School Uniforms</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Options</p>
+                <li class="active">
+                    <a href="#">Sort Items</a>
+                </li>
+                <li>
+                    <a href="#">Taken Orders</a>
+                </li>
+                <li>
+                    <a href="#">Made Orders</a>
+                </li>
+                <li>
+                    <a href="#">Cloth Record</a>
+                </li>
+            </ul>
+
+        </nav>
+
+
+        <!-- Page Content Holder -->
+        <div id="content">
+
+                <nav class="navbar navbar-default">
+                        <div class="container-fluid">
+                            <!-- Brand and toggle get grouped for better mobile display -->
+                            <div class="navbar-header">
+                                <span  class="navbar-toggle collapsed glyphicon glyphicon-hand-down  " 
+                                    data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                                    aria-expanded="false" style="margin-top:12px">
+                                    
+                            </span>
+        
+                                <span id="sidebarCollapse" class="btn btn-default pull-left glyphicon glyphicon-menu-hamburger" style="margin-top:12px">
+                                
+                                </span>
+                                <a class="navbar-brand" href="#">
+                                        
+                                    
+                                    
+                                   <strong><i>&nbsp;Singhal's Uniforms</i></strong>
+                                </a>
+                            </div>
+        
+                            <!-- Collect the nav links, forms, and other content for toggling -->
+                            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                                <ul class="nav navbar-nav">
+                                    
+            
+                                </ul>
+                                <form class="navbar-form navbar-right">
+                                        <div class="input-group">
+                                                <input type="text" class="form-control" id="searchQuery" placeholder="Search" name="search">
+                                                <div class="input-group-btn">
+                                                  <button class="btn btn-default" type="button">
+                                                    <i class="glyphicon glyphicon-search"></i>
+                                                  </button>
+                                                </div>
+                                </form>
+                                
+                            </div>
+                            <!-- /.navbar-collapse -->
+                        </div>
+                        <!-- /.container-fluid -->
+                    </nav>
+            <div style="margin-top:80px">
+                
+                    
+                    <div id="resume" class="decorator  responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th scope="col">SNo</th>
+                                    <th scope="col">Item</th>
+                                    <th scope="col">Class</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Size</th>
+                                    <th scope="col">Pipin</th>
+                                    <th scope="col">Qty</th>
+                                    <th scope="col">Options</th>
+                                    
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(item,index) in sortItems.Items" v-bind:id="item.id">
+                                    <td data-label="Sno">{{index+1}}</td>
+                                    <td data-label="Item">{{item.item}}</td>
+                                    <td data-label="Class">{{item.class}}</td>
+                                    <td data-label="Type">{{item.itype}}</td>
+                                    <td data-label="Size">{{item.size}}</td>
+                                    <td data-label="Pipin">{{item.pipin}}</td>
+                                    <td data-label="Qty">{{item.qty}}</td>
+                                    <td data-label="Options">
+                                        
+                                        <a v-bind:href="'EditSortRecord.html?id='+item.id"><span style="color:#87CEEB" class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                            &nbsp;
+                                        <span v-on:click="delrow(item.id)" style="color:#f00" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                    
+                                    
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                    
+
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="overlay"></div>
+
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+   <!--Vuejs include-->
+   <script>
+       var app=new Vue({
+    el:'#app',
+    data:{
+
+        sortItems:'',
+        itemToDelete:'',
+        total:'',
+        deposit:''
+
+    },
+    mounted:function(){
+        this.messages() //method1 will execute at pageload
+    },
+
+    methods:{
+        messages(){
+            $.post('Controller/sort_items.php', {
+                token:'get_sort_items'
+                
+              })
+              .done(function (data) { //if success
+               //if(response.status==200){
+                   
+                   app.sortItems=JSON.parse(data);
+                   console.log(JSON.stringify(data));
+                   
+                
+                //}
+              });
+        },
+
+        delrow:function(msg){
+
+            app.itemToDelete=msg;
+            $('#'+app.itemToDelete).hide(500);
+            $.post( "Controller/sort_items.php", { 
+                token:'delete_sort_item',
+                item: app.itemToDelete,
+                 
+            })
+             .done(function( data ) {
+               
+                
+                
+            });
+
+        }
+    }
+});
+   </script>
+   
+   <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').fadeOut();
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').fadeIn();
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>

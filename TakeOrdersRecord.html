@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <title>Collapsible sidebar using Bootstrap 3</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="css/style3.css">
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="css/jquery.mCustomScrollbar.css">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans|PT+Sans|Roboto+Slab|Shrikhand" rel="stylesheet">
+
+    <link href="css/mui.css" rel="stylesheet" type="text/css" />
+    <script src="js/mui.js"></script>
+    <script src="js/jquery-3.1.1.min"></script>
+
+    <script src="https://unpkg.com/axios/dist/axios.min.js?v=1"></script>
+
+    <script src="js/vue.js"></script>
+
+    <style>
+        .resume {
+
+            padding: .25in .1in;
+
+        }
+
+        .resume.decorator {
+            -webkit-box-shadow: 2px 2px 25px -5px rgba(0, 0, 0, 0.5);
+            -moz-box-shadow: 2px 2px 25px -5px rgba(0, 0, 0, 0.5);
+            box-shadow: 2px 2px 25px -5px rgba(0, 0, 0, 0.5);
+            margin: 50px;
+        }
+
+        html {
+            padding: 35px;
+            font-size: 13.5px;
+        }
+
+        body {
+            color: #333;
+            font-family: 'Helvetica Neue', sans-serif;
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            line-height: 1.25;
+        }
+
+        .form-control {
+            border: 0;
+        }
+
+        table {
+            border: 1px solid #00f;
+            border-collapse: collapse;
+            margin: 0;
+            padding: 0;
+
+            table-layout: fixed;
+        }
+
+        table caption {
+            font-size: 1.5em;
+            margin: .5em 0 .75em;
+        }
+
+        table tr {
+            background: #ffffff;
+            border: 1px solid #fff;
+            padding: .35em;
+        }
+
+        table th,
+        table td {
+            padding: .625em;
+            text-align: center;
+        }
+
+        table th {
+            font-size: .85em;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        @media screen and (max-width: 600px) {
+            table {
+                border: 0;
+            }
+            table caption {
+                font-size: 1.3em;
+            }
+            table thead {
+                border: none;
+                clip: rect(0 0 0 0);
+                height: 1px;
+                margin: -1px;
+                overflow: hidden;
+                padding: 0;
+                position: absolute;
+                width: 1px;
+            }
+            table tr {
+
+                display: block;
+                margin-bottom: .625em;
+            }
+            table td {
+                border-bottom: 1px solid #fff;
+                display: block;
+                font-size: .8em;
+                text-align: right;
+            }
+            table td:before {
+                /*
+            * aria-label has no advantage, it won't be read inside a table
+            content: attr(aria-label);
+            */
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+            table td:last-child {
+                border-bottom: 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div id="app" class="wrapper">
+        <!-- Sidebar Holder -->
+        <nav id="sidebar" style="">
+            <div id="dismiss">
+                <i class="glyphicon glyphicon-arrow-left"></i>
+            </div>
+
+            <div class="sidebar-header">
+                <h3>Bootstrap Sidebar</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <p>Dummy Heading</p>
+                <li class="active">
+                    <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false">Home</a>
+                    <ul class="collapse list-unstyled" id="homeSubmenu">
+                        <li>
+                            <a href="#">Home 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Home 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Home 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">About</a>
+                    <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false">Pages</a>
+                    <ul class="collapse list-unstyled" id="pageSubmenu">
+                        <li>
+                            <a href="#">Page 1</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 2</a>
+                        </li>
+                        <li>
+                            <a href="#">Page 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">Portfolio</a>
+                </li>
+                <li>
+                    <a href="#">Contact</a>
+                </li>
+            </ul>
+
+            <ul class="list-unstyled CTAs">
+                <li>
+                    <a href="https://bootstrapious.com/tutorial/files/sidebar.zip" class="download">Download source</a>
+                </li>
+                <li>
+                    <a href="https://bootstrapious.com/p/bootstrap-sidebar" class="article">Back to article</a>
+                </li>
+            </ul>
+        </nav>
+
+
+        <!-- Page Content Holder -->
+        <div id="content">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <span  class="navbar-toggle collapsed glyphicon glyphicon-hand-down  " 
+                            data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                            aria-expanded="false" style="margin-top:12px">
+                            
+                    </span>
+
+                        <span id="sidebarCollapse" class="btn btn-default pull-left glyphicon glyphicon-menu-hamburger" style="margin-top:12px">
+                        
+                        </span>
+                        <a class="navbar-brand" href="#">
+                                
+                            
+                            
+                           <strong><i>&nbsp;Singhal's Uniforms</i></strong>
+                        </a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            
+    
+                        </ul>
+                        <form class="navbar-form navbar-right">
+                                <div class="input-group">
+                                        <input type="text" class="form-control" id="searchQuery" placeholder="Search" name="search">
+                                        <div class="input-group-btn">
+                                          <button class="btn btn-default" type="button" @click="getTakeOrderByName">
+                                            <i class="glyphicon glyphicon-search"></i>
+                                          </button>
+                                        </div>
+                        </form>
+                        
+                    </div>
+                    <!-- /.navbar-collapse -->
+                </div>
+                <!-- /.container-fluid -->
+            </nav>
+            <div id="myRecord" style="margin-top:50px" class="row">
+                <div class="col-sm-1"></div>
+
+
+                <div class="col-sm-10">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">SNo.</th>
+                                <th scope="col">From</th>
+                                <th scope="col">Contact</th>
+                                <th scope="col">Item</th>
+                                <th scope="col">Class</th>
+                                <th scope="col">Size</th>
+                                <th scope="col">Qty</th>
+                                <th scope="col">Total</th>
+                                <th scope="col">Deposit</th>
+                                <th scope="col">Balance</th>
+                                <th scope="col">Delete</th>
+
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="decorator resume" v-for="(order,index) in takeOrdersRecord.Orders" v-bind:id="order.id">
+                                <td data-label="Sno">{{index+1}}</td>
+                                <td data-label="From">{{order.ofrom}}</td>
+                                <td data-label="Contact">{{order.phone}}</td>
+                                <td data-label="Item">{{order.item}}</td>
+                                <td data-label="Class">{{order.class}}</td>
+                                <td data-label="Size">{{order.size}}</td>
+                                <td data-label="Qty">{{order.qty}}</td>
+                                <td data-label="Total">{{order.total}}</td>
+                                <td data-label="Deposit">{{order.deposit}}</td>
+                                <td data-label="Balance">{{order.balance}}</td>
+                                <td data-label="Delete" >
+                                        <a v-bind:href="'EditTakeOrders.html?id='+order.id"><span style="color:#87CEEB" class="glyphicon glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+                                        &nbsp;
+                                    <span v-on:click="delrow(order.id)" style="color:#f00" class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-1"></div>
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="overlay"></div>
+
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <!-- Bootstrap Js CDN -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- jQuery Custom Scroller CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <!--Vuejs include-->
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+
+                takeOrdersRecord: '',
+                orderToDelete: '',
+                searchResults:''
+
+
+            },
+            mounted: function () {
+                this.getTakeOrders() //method1 will execute at pageload
+            },
+
+            methods: {
+                getTakeOrders() {
+                    $.post('Controller/take_orders.php', {
+            
+                            token:'get_take_orders',
+                        
+
+                    })
+                        .done(function (data) { //if success
+                            //if(response.status==200){
+
+                            app.takeOrdersRecord = JSON.parse(data);
+                            console.log(JSON.stringify(data));
+
+
+                            //}
+                        });
+                }, delrow: function (id) {
+
+                    app.orderToDelete = id;
+                    $('#' + app.orderToDelete).hide(500);
+                    $.post("Controller/take_orders.php", {
+                        token:'delete_take_order_row',
+                        orderId: app.orderToDelete,
+
+                    })
+                        .done(function (data) {
+
+                            console.log(data);
+
+                        });
+
+                },getTakeOrderByName(){
+
+                    $.post("Controller/take_orders.php", {
+                        token:'search_take_orders',
+                        ofrom: $('#searchQuery').val(),
+
+                    })
+                        .done(function (data) {
+                            app.searchResults=data;
+
+                    });
+
+
+                }
+
+
+
+
+
+            }
+        });
+
+    </script>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#sidebar").mCustomScrollbar({
+                theme: "minimal"
+            });
+
+            $('#dismiss, .overlay').on('click', function () {
+                $('#sidebar').removeClass('active');
+                $('.overlay').fadeOut();
+            });
+
+            $('#sidebarCollapse').on('click', function () {
+                $('#sidebar').addClass('active');
+                $('.overlay').fadeIn();
+                $('.collapse.in').toggleClass('in');
+                $('a[aria-expanded=true]').attr('aria-expanded', 'false');
+            });
+        });
+    </script>
+</body>
+
+</html>
