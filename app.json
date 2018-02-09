@@ -1,0 +1,6 @@
+{
+  "name": "Start on Heroku: PHP",
+  "description": "sfits management",
+  "repository": "https://github.com/kanmay/sfits",
+  "addons": []
+}
